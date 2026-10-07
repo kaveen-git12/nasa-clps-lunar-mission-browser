@@ -1,1 +1,472 @@
+/* Google Fonts for the login page */
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Outfit:wght@700;800&display=swap");
+
 @import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOGIN PAGE — Starfall design system (scoped to .login-world)
+   Only applies on /login; does not affect any other NASA page.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Login-scoped CSS custom properties */
+.login-world {
+  --lp-radius: 0.5rem;
+  --lp-background: oklch(0.035 0.01 280);
+  --lp-foreground: oklch(0.97 0.012 280);
+  --lp-primary: oklch(0.64 0.215 295);
+  --lp-primary-foreground: oklch(0.99 0 0);
+  --lp-secondary: oklch(0.21 0.018 285);
+  --lp-muted: oklch(0.2 0.015 282);
+  --lp-muted-foreground: oklch(0.73 0.013 281);
+  --lp-border: oklch(0.64 0.025 285 / 35%);
+  --lp-field: oklch(0.21 0.015 282 / 70%);
+  --lp-field-border: oklch(0.63 0.015 275 / 23%);
+  --lp-soft-text: oklch(0.79 0.016 279);
+  --lp-lilac: oklch(0.79 0.13 296);
+  --lp-ring: oklch(0.72 0.16 295);
+  --lp-sun-core: oklch(1 0 0);
+  --lp-sun-corona: oklch(0.98 0.045 82 / 94%);
+  --lp-sun-halo: oklch(0.84 0.095 70 / 32%);
+  --lp-sun-halo-soft: oklch(0.76 0.08 65 / 9%);
+  --lp-sun-ray: oklch(0.96 0.065 78 / 48%);
+  --lp-sun-ray-soft: oklch(0.93 0.075 73 / 18%);
+}
+
+/* Layout */
+.login-world {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--lp-background);
+  color: var(--lp-foreground);
+  font-family: "Manrope", sans-serif;
+}
+
+/* Space background image */
+.login-world .space-field {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sun glow */
+.login-world .sun-glow {
+  position: absolute;
+  z-index: -2;
+  width: clamp(280px, 32vw, 460px);
+  aspect-ratio: 1;
+  top: calc(43% + max(5.6vw, 49px) - 6px);
+  left: 26.7%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    var(--lp-sun-corona) 0,
+    var(--lp-sun-halo) 8%,
+    var(--lp-sun-halo-soft) 29%,
+    transparent 66%
+  );
+}
+
+.login-world .sun-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--lp-sun-ray) 1deg,
+    transparent 4deg 40deg,
+    var(--lp-sun-ray-soft) 44deg,
+    transparent 49deg 87deg,
+    var(--lp-sun-ray) 90deg,
+    transparent 93deg 139deg,
+    var(--lp-sun-ray-soft) 145deg,
+    transparent 152deg 177deg,
+    var(--lp-sun-ray) 180deg,
+    transparent 184deg 222deg,
+    var(--lp-sun-ray-soft) 226deg,
+    transparent 233deg 267deg,
+    var(--lp-sun-ray) 270deg,
+    transparent 274deg 309deg,
+    var(--lp-sun-ray) 315deg,
+    transparent 321deg 357deg,
+    var(--lp-sun-ray) 360deg
+  );
+  mask-image: radial-gradient(circle, var(--lp-sun-core) 0 5%, transparent 64%);
+  filter: blur(2.5px);
+}
+
+.login-world .sun-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle,
+      var(--lp-sun-core) 0 2%,
+      var(--lp-sun-corona) 3%,
+      var(--lp-sun-halo) 7%,
+      transparent 17%
+    ),
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--lp-sun-ray-soft) 22%,
+      var(--lp-sun-corona) 50%,
+      var(--lp-sun-ray-soft) 78%,
+      transparent
+    );
+  background-size: 100% 100%, 100% 3px;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(0.7px);
+}
+
+/* 3D Moon canvas */
+.login-world .lunar-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+/* Login layer (centers the card) */
+.login-layer {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  pointer-events: none;
+  perspective: 1600px;
+}
+
+/* Glassmorphism login card */
+.login-card {
+  pointer-events: auto;
+  position: relative;
+  width: min(100%, 416px);
+  border: 1px solid oklch(0.91 0.025 270 / 92%);
+  border-radius: 43px;
+  padding: 58px 54px 34px;
+  background: linear-gradient(
+    132deg,
+    oklch(0.31 0.012 275 / 38%),
+    oklch(0.12 0.013 280 / 55%) 52%,
+    oklch(0.22 0.027 300 / 45%)
+  );
+  box-shadow:
+    inset 1px 1px 1px oklch(1 0 0 / 26%),
+    inset -1px -1px 1px oklch(0.67 0.14 298 / 17%),
+    0 28px 90px oklch(0 0 0 / 44%),
+    0 0 34px oklch(0.65 0.19 295 / 10%);
+  backdrop-filter: blur(24px) saturate(125%) brightness(88%);
+  will-change: transform;
+}
+
+.login-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    150deg,
+    oklch(1 0 0 / 8%),
+    transparent 30%,
+    transparent 72%,
+    oklch(0.67 0.17 300 / 10%)
+  );
+  border-right: 1px solid oklch(0.73 0.13 300 / 42%);
+  border-bottom: 1px solid oklch(0.73 0.13 300 / 38%);
+}
+
+/* Card spin animations */
+.login-card.spin-right-to-left {
+  animation: card-spin-rtl 2.2s cubic-bezier(0.4, 0, 0.3, 1);
+}
+.login-card.spin-left-to-right {
+  animation: card-spin-ltr 2.2s cubic-bezier(0.4, 0, 0.3, 1);
+}
+@keyframes card-spin-rtl {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+@keyframes card-spin-ltr {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(-360deg); }
+}
+
+/* Card inner content */
+.card-content {
+  position: relative;
+  z-index: 1;
+  color: var(--lp-foreground);
+}
+
+.heading-rule {
+  width: 48px;
+  height: 2px;
+  margin: 3px 0 16px 3px;
+  background: var(--lp-primary);
+}
+
+.login-card h1 {
+  font-family: "Outfit", sans-serif;
+  font-size: 43px;
+  font-weight: 800;
+  line-height: 0.87;
+  letter-spacing: 0;
+  margin: 0;
+  color: var(--lp-foreground);
+}
+
+.login-card h1 span {
+  color: var(--lp-primary);
+}
+
+.intro {
+  font-size: 14px;
+  color: var(--lp-soft-text);
+  margin: 22px 0 23px;
+  white-space: nowrap;
+}
+
+/* Form fields */
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--lp-foreground);
+}
+
+.password-label {
+  margin-top: 17px;
+}
+
+.input-shell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 47px;
+  padding: 0 12px;
+  gap: 11px;
+  border: 1px solid var(--lp-field-border);
+  border-radius: 13px;
+  background: var(--lp-field);
+  color: var(--lp-soft-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-shell:focus-within {
+  border-color: var(--lp-lilac);
+  box-shadow: 0 0 0 3px oklch(0.7 0.16 295 / 14%);
+}
+
+.input-shell > svg {
+  flex: none;
+}
+
+.input-shell input {
+  width: 100%;
+  min-width: 0;
+  outline: none;
+  background: transparent;
+  color: var(--lp-foreground);
+  font-size: 13px;
+  font-family: inherit;
+  border: none;
+}
+
+.input-shell input::placeholder {
+  color: var(--lp-muted-foreground);
+  opacity: 1;
+}
+
+/* Form options row */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 17px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--lp-soft-text);
+  font-size: 12px;
+}
+
+.remember input[type="checkbox"] {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  flex: none;
+  border: 1px solid var(--lp-border);
+  border-radius: 5px;
+  background: var(--lp-field);
+  cursor: pointer;
+}
+
+.remember input[type="checkbox"]:checked {
+  background: var(--lp-primary);
+  box-shadow: inset 0 0 0 4px var(--lp-field);
+}
+
+.remember input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--lp-lilac);
+  outline-offset: 2px;
+}
+
+/* Submit button */
+.submit-button {
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+  border-radius: 13px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Show/hide password button */
+.show-button {
+  flex: none;
+  color: var(--lp-soft-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.show-button:hover {
+  color: var(--lp-foreground);
+}
+
+/* Switch mode text */
+.switch-mode {
+  margin: 25px 0 0;
+  color: var(--lp-soft-text);
+  font-size: 13px;
+}
+
+/* Feedback messages */
+.form-feedback {
+  margin: 15px 0 -6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--lp-lilac);
+}
+
+.form-feedback.error {
+  color: oklch(0.8 0.13 20);
+}
+
+/* Button variants for login page */
+.login-btn-cosmic {
+  background: var(--lp-primary);
+  color: var(--lp-primary-foreground);
+  box-shadow: 0 12px 30px color-mix(in oklch, var(--lp-primary) 25%, transparent);
+  border: none;
+  border-radius: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.login-btn-cosmic:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.login-btn-text {
+  color: var(--lp-lilac);
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: auto;
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.login-btn-text:hover:not(:disabled) {
+  color: var(--lp-foreground);
+}
+
+.login-btn-field {
+  color: var(--lp-soft-text);
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: auto;
+  box-shadow: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.login-btn-field:hover:not(:disabled) {
+  color: var(--lp-foreground);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .login-layer {
+    align-items: center;
+    padding: 26px 18px;
+  }
+
+  .login-card {
+    padding: 42px 32px 32px;
+    border-radius: 32px;
+    max-width: 390px;
+  }
+
+  .login-card h1 {
+    font-size: 40px;
+  }
+
+  .intro {
+    font-size: 12px;
+  }
+
+  .login-world .sun-glow {
+    top: calc(50% + max(5.5vw, 22px) - 6px);
+    left: 20%;
+    width: clamp(230px, 58vw, 340px);
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card {
+    padding-inline: 22px;
+  }
+
+  .intro {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-card.spin-right-to-left,
+  .login-card.spin-left-to-right {
+    animation: none;
+  }
+}
