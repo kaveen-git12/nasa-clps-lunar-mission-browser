@@ -73,11 +73,11 @@ export default function Login() {
       changeMode("signin");
       setBusy(false);
     } else {
-      // Sign-in: navigate to the NASA app
+      // Sign-in: navigate to the NASA app dashboard
       if (!keepSignedIn) {
         // Backend will handle session persistence later
       }
-      navigate("/");
+      navigate("/dashboard");
     }
   }
 
