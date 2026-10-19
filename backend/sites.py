@@ -1,3 +1,4 @@
+
 """Source-referenced lunar south-pole locations for the Lunar Map."""
 
 SITES = [
@@ -23,9 +24,7 @@ SITES = [
         "longitude_deg": -67.97,
         "coordinate_status": "source-reported; frame verification pending",
         "source_name": "Remote Sensing research article",
-        "source_url": (
-            "https://www.mdpi.com/2072-4292/17/9/1579"
-        ),
+        "source_url": "https://www.mdpi.com/2072-4292/17/9/1579",
         "source_note": (
             "Published candidate-region coordinates; "
             "not a surveyed touchdown point."
@@ -53,9 +52,7 @@ SITES = [
         "longitude_deg": 53.49,
         "coordinate_status": "source-reported; frame verification pending",
         "source_name": "Remote Sensing research article",
-        "source_url": (
-            "https://www.mdpi.com/2072-4292/17/9/1579"
-        ),
+        "source_url": "https://www.mdpi.com/2072-4292/17/9/1579",
         "source_note": "Reported crater coordinates.",
     },
     {
@@ -67,7 +64,9 @@ SITES = [
         "coordinate_status": "source-reported; frame verification pending",
         "source_name": "NASA Planetary Data System",
         "source_url": (
-            "https://pds.nasa.gov/services/search/search"
+            "https://pds.nasa.gov/ds-view/pds/viewContext.jsp"
+            "?identifier=urn%3Anasa%3Apds%3Acontext%3Ainstrument_host%3A"
+            "spacecraft.clps_to_prime1_athena&version=1.0"
         ),
         "source_note": (
             "IM-2 Athena landing location in the Mons Mouton region."
