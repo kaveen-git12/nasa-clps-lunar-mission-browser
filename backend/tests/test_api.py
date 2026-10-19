@@ -80,6 +80,116 @@ class LunarMapApiTests(unittest.TestCase):
             "Pending coordinate-frame verification",
         )
 
+    def test_coordinate_validation_accepts_valid_input(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={
+                "latitude_deg": -85.5,
+                "longitude_deg": 45.25,
+                "coordinate_frame": "planetographic",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json["data"]["range_valid"])
+        self.assertEqual(
+            response.json["data"]["scientific_validity"],
+            "not_assessed",
+        )
+        self.assertEqual(
+            response.json["data"]["coordinate_frame"],
+            "planetographic",
+        )
+
+    def test_coordinate_validation_rejects_missing_fields(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={"latitude_deg": -85.5},
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "MISSING_REQUIRED_FIELDS",
+        )
+
+    def test_coordinate_validation_rejects_non_numeric_latitude(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={
+                "latitude_deg": "south",
+                "longitude_deg": 45.25,
+                "coordinate_frame": "planetographic",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "INVALID_LATITUDE",
+        )
+
+    def test_coordinate_validation_rejects_out_of_range_latitude(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={
+                "latitude_deg": -91,
+                "longitude_deg": 45.25,
+                "coordinate_frame": "planetographic",
+            },
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "LATITUDE_OUT_OF_RANGE",
+        )
+
+    def test_coordinate_validation_rejects_out_of_range_longitude(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={
+                "latitude_deg": -85.5,
+                "longitude_deg": 181,
+                "coordinate_frame": "planetographic",
+            },
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "LONGITUDE_OUT_OF_RANGE",
+        )
+
+    def test_coordinate_validation_rejects_empty_frame(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            json={
+                "latitude_deg": -85.5,
+                "longitude_deg": 45.25,
+                "coordinate_frame": " ",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "INVALID_COORDINATE_FRAME",
+        )
+
+    def test_coordinate_validation_rejects_non_json_body(self):
+        response = self.client.post(
+            "/api/analysis/validate-coordinates",
+            data="not json",
+            content_type="text/plain",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json["error"]["code"],
+            "INVALID_JSON_BODY",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
