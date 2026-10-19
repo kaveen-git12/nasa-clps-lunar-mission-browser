@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify
 
 from sites import SITES
@@ -23,7 +24,13 @@ def list_sites():
             "coordinate_units": "degrees",
             "latitude_range": [-90, 90],
             "longitude_range": [-180, 180],
-            "coordinate_verification": "pending",
+            "coordinate_frame_policy": (
+                "Per-site metadata; coordinate frames are not yet "
+                "harmonized across all records."
+            ),
+            "scientific_use_status": (
+                "Pending coordinate-frame verification"
+            ),
         },
     })
 
