@@ -131,8 +131,8 @@ export default function Login() {
               {mode === "signin"
                 ? "Sign in to continue to your account."
                 : mode === "signup"
-                ? "Create your account to get started."
-                : "We'll send you a link to reset your password."}
+                  ? "Create your account to get started."
+                  : "We'll send you a link to reset your password."}
             </p>
 
             <form onSubmit={submit}>
@@ -268,10 +268,10 @@ export default function Login() {
                 {busy
                   ? "Please wait…"
                   : mode === "signin"
-                  ? "Sign in"
-                  : mode === "signup"
-                  ? "Create account"
-                  : "Send reset link"}
+                    ? "Sign in"
+                    : mode === "signup"
+                      ? "Create account"
+                      : "Send reset link"}
               </Button>
             </form>
 

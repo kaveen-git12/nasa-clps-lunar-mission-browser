@@ -116,7 +116,7 @@ export const findMission = (id: string) => CATALOG.find((m) => m.id === id);
  * ------------------------------------------------------------------ */
 
 export type Notice = { id: string; text: string; at: number; read: boolean };
-export type Profile = { name: string; email: string; role: string };
+export type Profile = { name: string; email: string; role: string; avatar?: string };
 export type Prefs = { notifications: boolean; compactCards: boolean };
 export type Added = { id: string; name: string };
 
@@ -137,9 +137,15 @@ export const DEFAULT_STATE: State = {
   missions: {},
   draft: null,
   added: null,
-  notices: [],
-  profile: { name: "Harshitha", email: "", role: "Mission Analyst" },
-  prefs: { notifications: true, compactCards: false },
+  notices: [
+    { id: "n-1", text: "Artemis CLPS-1 payload manifest updated", at: Date.now() - 1000 * 60 * 35, read: false },
+    { id: "n-2", text: "VIPER rover navigation path calibrated", at: Date.now() - 1000 * 60 * 120, read: false },
+    { id: "n-3", text: "IM-1 Odysseus telemetry archived", at: Date.now() - 1000 * 60 * 240, read: false },
+    { id: "n-4", text: "Blue Ghost 1 launch window confirmed", at: Date.now() - 1000 * 60 * 360, read: false },
+    { id: "n-5", text: "Griffin Mission 1 lander tests completed", at: Date.now() - 1000 * 60 * 720, read: false },
+  ],
+  profile: { name: "Harshitha", email: "analyst@nasa.gov", role: "Mission Analyst" },
+  prefs: { notifications: true, compactCards: true },
 };
 
 let state: State = DEFAULT_STATE;
@@ -160,8 +166,12 @@ function load() {
       missions: p.missions ?? {},
       draft: p.draft ?? null,
       added: p.added ?? null,
-      notices: Array.isArray(p.notices) ? p.notices : [],
-      profile: { ...DEFAULT_STATE.profile, ...(p.profile ?? {}) },
+      notices: Array.isArray(p.notices) && p.notices.length > 0 ? p.notices : DEFAULT_STATE.notices,
+      profile: {
+        ...DEFAULT_STATE.profile,
+        ...(p.profile ?? {}),
+        email: p.profile?.email || DEFAULT_STATE.profile.email,
+      },
       prefs: { ...DEFAULT_STATE.prefs, ...(p.prefs ?? {}) },
     };
   } catch {

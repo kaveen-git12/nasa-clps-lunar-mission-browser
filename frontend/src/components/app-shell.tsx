@@ -57,14 +57,16 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Lunar Control</div>
         </div>
       </div>
-      <nav className="glass flex flex-1 flex-col rounded-2xl p-3">
+
+      <nav className="sidebar-glass flex flex-1 flex-col rounded-2xl p-3">
+
         <ul className="space-y-1.5">
           <li>
             <NavLink
               to="/dashboard"
               onClick={onNavigate}
               className={({ isActive }) =>
-                `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-muted"}`
+                `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
               }
             >
               <Home className="h-5 w-5" strokeWidth={1.6} /> Dashboard
@@ -75,7 +77,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               to="/missions"
               onClick={onNavigate}
               className={({ isActive }) =>
-                `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-muted"}`
+                `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
               }
             >
               <Rocket className="h-5 w-5" strokeWidth={1.6} /> Missions
@@ -87,7 +89,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                 to={to}
                 onClick={onNavigate}
                 className={({ isActive }) =>
-                  `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-muted"}`
+                  `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
                 }
               >
                 <I className="h-5 w-5" strokeWidth={1.6} /> {label}

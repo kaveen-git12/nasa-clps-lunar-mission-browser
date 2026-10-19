@@ -62,12 +62,12 @@ function StatCard({
   );
 }
 
-function MissionCard({ row }: { row: MyRow }) {
+function MissionCard({ row, compact }: { row: MyRow; compact?: boolean }) {
   const { id, status, mission: m } = row;
   return (
     <article className="glass glass-hover flex flex-col overflow-hidden rounded-2xl">
       <Link to={`/missions/${id}`} className="relative block">
-        <img src={missionImg(m)} alt={m.name} loading="lazy" className="h-36 w-full object-cover" />
+        {!compact && <img src={missionImg(m)} alt={m.name} loading="lazy" className="h-36 w-full object-cover" />}
         <span
           className={`absolute left-3 top-3 flex items-center gap-1 rounded-full px-3 py-0.5 text-xs font-medium ${statusTone[status]}`}
         >
@@ -205,7 +205,7 @@ export default function Missions() {
             n={stats.total}
             label="Total Missions"
             icon={Rocket}
-            tone="bg-primary/30"
+            tone="bg-white/10 border border-white/20"
             active={filters.status === "all"}
             onClick={() => set({ status: "all" })}
           />
@@ -213,7 +213,7 @@ export default function Missions() {
             n={stats.active}
             label="Active Missions"
             icon={Satellite}
-            tone="bg-success/30"
+            tone="bg-white/10 border border-white/20"
             active={filters.status === "active"}
             onClick={() => set({ status: "active" })}
           />
@@ -221,7 +221,7 @@ export default function Missions() {
             n={stats.completed}
             label="Completed Missions"
             icon={CircleCheck}
-            tone="bg-steel/30"
+            tone="bg-white/10 border border-white/20"
             active={filters.status === "completed"}
             onClick={() => set({ status: "completed" })}
           />
@@ -229,7 +229,7 @@ export default function Missions() {
             n={stats.upcoming}
             label="Upcoming Missions"
             icon={Clock}
-            tone="bg-amber/30"
+            tone="bg-white/10 border border-white/20"
             active={filters.status === "upcoming"}
             onClick={() => set({ status: "upcoming" })}
           />
@@ -321,7 +321,7 @@ export default function Missions() {
         ) : (
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {shown.map((r) => (
-              <MissionCard key={r.id} row={r} />
+              <MissionCard key={r.id} row={r} compact={s.prefs.compactCards} />
             ))}
           </section>
         )}
