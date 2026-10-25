@@ -45,7 +45,11 @@ export default function MissionDetails() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-gradient-title text-3xl font-bold">{m.name}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+              {m.name}
+            </span>
+          </h1>
           {status && (
             <span
               className={`ml-auto flex items-center gap-1 rounded-full px-4 py-1 text-sm font-medium ${statusTone[status]}`}

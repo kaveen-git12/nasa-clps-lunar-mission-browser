@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { actions, useStore, DEFAULT_STATE, type Prefs, type Profile } from "@/lib/mission-store";
-
 export default function Settings() {
   const { profile, prefs } = useStore();
   const [profileForm, setProfileForm] = useState<Profile>(profile);
@@ -26,20 +25,17 @@ export default function Settings() {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetSuccessMessage, setResetSuccessMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [prevProfile, setPrevProfile] = useState(profile);
   if (profile !== prevProfile) {
     setPrevProfile(profile);
     setProfileForm(profile);
   }
-
   // Storage usage calculation
   const [storageStats, setStorageStats] = useState({
     usedText: "2.4 MB used",
     limitText: "50 MB limit",
     percentage: 4.8,
   });
-
   const measureStorage = async () => {
     try {
       if (navigator.storage && navigator.storage.estimate) {
@@ -70,7 +66,6 @@ export default function Settings() {
       // keep default stats
     }
   };
-
   useEffect(() => {
     let ignore = false;
     if (typeof window !== "undefined" && navigator.storage && navigator.storage.estimate) {
@@ -99,7 +94,6 @@ export default function Settings() {
       ignore = true;
     };
   }, []);
-
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!profileForm.name.trim()) return;
@@ -113,16 +107,13 @@ export default function Settings() {
     void measureStorage();
     setTimeout(() => setSavedMessage(""), 3500);
   };
-
   const handlePrefToggle = (key: keyof Prefs, checked: boolean) => {
     actions.updatePrefs({ ...prefs, [key]: checked });
     void measureStorage();
   };
-
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
@@ -133,7 +124,6 @@ export default function Settings() {
     };
     reader.readAsDataURL(file);
   };
-
   const confirmReset = () => {
     actions.resetAll();
     setProfileForm(DEFAULT_STATE.profile);
@@ -142,7 +132,6 @@ export default function Settings() {
     setResetSuccessMessage("All dashboard data, missions, and preferences have been reset.");
     setTimeout(() => setResetSuccessMessage(""), 4500);
   };
-
   return (
     <AppShell>
       <div className="flex flex-col gap-6 pb-12 w-full max-w-6xl">
@@ -153,21 +142,22 @@ export default function Settings() {
             <span className="font-medium">{savedMessage}</span>
           </div>
         )}
-
         {resetSuccessMessage && (
           <div className="flex items-center gap-2.5 rounded-xl border border-rose-500/40 bg-rose-950/70 backdrop-blur-xl px-4 py-3 text-sm text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.25)] animate-in fade-in slide-in-from-top-2 duration-200">
             <Check className="h-4 w-4 text-rose-400 shrink-0" />
             <span className="font-medium">{resetSuccessMessage}</span>
           </div>
         )}
-
         {/* Page Heading */}
         <div className="flex items-center gap-4">
           <div className="text-cyan-400 drop-shadow-[0_0_14px_rgba(34,211,238,0.75)] shrink-0">
             <SettingsIcon className="w-8 h-8 md:w-9 md:h-9" strokeWidth={1.8} />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
+            <h1
+              className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap"
+              style={{ fontFamily: '"Cinzel", serif' }}
+            >
               <span>Settings &</span>
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
                 Preferences
@@ -178,7 +168,6 @@ export default function Settings() {
             </p>
           </div>
         </div>
-
         {/* 1. Analyst Profile Card */}
         <section className="glass rounded-2xl p-6 md:p-7">
           <div className="flex items-start gap-3 mb-6">
@@ -188,7 +177,6 @@ export default function Settings() {
               <p className="text-xs md:text-sm text-slate-400 mt-0.5">Manage your personal details and role assignment.</p>
             </div>
           </div>
-
           <form onSubmit={handleProfileSubmit}>
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8">
               {/* Left Column: Avatar */}
@@ -219,8 +207,6 @@ export default function Settings() {
                   onChange={handleAvatarUpload}
                 />
               </div>
-
-
               <div
                 className="hidden md:block self-stretch mx-3 w-[3px] rounded-full"
                 style={{
@@ -230,9 +216,6 @@ export default function Settings() {
                     "0 0 6px rgba(255,255,255,0.18), inset 0 0 2px rgba(255,255,255,0.5)",
                 }}
               />
-
-
-
               {/* Right Column: Profile Form Fields */}
               <div className="flex-1 w-full space-y-4">
                 {/* Row 1: Name and Email */}
@@ -251,7 +234,6 @@ export default function Settings() {
                       />
                     </div>
                   </div>
-
                   <div>
                     <label className="text-xs text-slate-300 font-medium mb-1.5 block">Email</label>
                     <div className="flex items-center h-11 px-3.5 rounded-xl bg-white/10 border border-white/20 focus-within:border-cyan-400 focus-within:ring-1 focus-within:ring-cyan-400/40 transition-all">
@@ -266,7 +248,6 @@ export default function Settings() {
                     </div>
                   </div>
                 </div>
-
                 {/* Row 2: Role / Assignment + Save Changes Button */}
                 <div className="flex flex-col sm:flex-row items-end gap-4">
                   <div className="flex-1 w-full">
@@ -287,7 +268,6 @@ export default function Settings() {
                       <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 pointer-events-none" />
                     </div>
                   </div>
-
                   <button
                     type="submit"
                     className="w-full sm:w-auto h-11 px-6 rounded-xl bg-gradient-to-r from-sky-400 via-blue-500 to-purple-600 hover:from-sky-300 hover:via-blue-400 hover:to-purple-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(56,189,248,0.35)] hover:shadow-[0_0_25px_rgba(56,189,248,0.5)] active:scale-[0.98] transition-all shrink-0 cursor-pointer"
@@ -300,7 +280,6 @@ export default function Settings() {
             </div>
           </form>
         </section>
-
         {/* 2. Application Preferences Card */}
         <section className="glass rounded-2xl p-6 md:p-7">
           <div className="flex items-start gap-3 mb-6">
@@ -310,7 +289,6 @@ export default function Settings() {
               <p className="text-xs md:text-sm text-slate-400 mt-0.5">Customize how the application behaves and notifies you.</p>
             </div>
           </div>
-
           <div className="space-y-4">
             {/* Preference Row 1: Activity Notifications */}
             <div className="flex items-center justify-between p-4 md:px-5 md:py-4 rounded-2xl border border-white/20 bg-white/10 hover:border-slate-600/70 transition-all">
@@ -325,7 +303,6 @@ export default function Settings() {
                   </p>
                 </div>
               </div>
-
               <button
                 type="button"
                 role="switch"
@@ -342,7 +319,6 @@ export default function Settings() {
                 />
               </button>
             </div>
-
             {/* Preference Row 2: Compact Mission Cards */}
             <div className="flex items-center justify-between p-4 md:px-5 md:py-4 rounded-2xl border border-white/20 bg-white/10 hover:border-slate-600/70 transition-all">
               <div className="flex items-center gap-4">
@@ -356,7 +332,6 @@ export default function Settings() {
                   </p>
                 </div>
               </div>
-
               <button
                 type="button"
                 role="switch"
@@ -375,7 +350,6 @@ export default function Settings() {
             </div>
           </div>
         </section>
-
         {/* 3. Local Storage & Reset Card */}
         <section className="glass rounded-2xl p-6 md:p-7">
           <div className="flex items-start gap-3 mb-6">
@@ -388,7 +362,6 @@ export default function Settings() {
               </p>
             </div>
           </div>
-
           <div className="rounded-2xl border border-white/20 bg-white/10 p-4 md:p-5 flex flex-col lg:flex-row items-center justify-between gap-6">
             {/* Left Side: Local Storage Usage */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-1 w-full">
@@ -401,7 +374,6 @@ export default function Settings() {
                   <p className="text-xs md:text-sm text-slate-400 mt-0.5">Stores your missions, settings and cached data</p>
                 </div>
               </div>
-
               <div className="w-full sm:w-64 lg:w-72 shrink-0">
                 <div className="flex items-center justify-between text-xs mb-1.5 font-medium">
                   <span className="font-semibold text-white">{storageStats.usedText}</span>
@@ -415,10 +387,8 @@ export default function Settings() {
                 </div>
               </div>
             </div>
-
             {/* Subtle Vertical Divider */}
             <div className="hidden lg:block w-px self-stretch bg-slate-700/60 mx-2" />
-
             {/* Right Side: Reset All Data */}
             <div className="flex flex-col items-center shrink-0 w-full lg:w-auto">
               <button
@@ -436,7 +406,6 @@ export default function Settings() {
           </div>
         </section>
       </div>
-
       {/* Confirmation Modal for Reset All Data */}
       {showResetConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200">
@@ -448,14 +417,12 @@ export default function Settings() {
             >
               <X className="w-5 h-5" />
             </button>
-
             <div className="flex items-center gap-3 text-rose-400 mb-3">
               <div className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500/20 border border-rose-500/40">
                 <AlertTriangle className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-bold text-white">Reset Local Storage?</h3>
             </div>
-
             <p className="text-sm text-slate-300 leading-relaxed">
               This action will permanently delete all your custom missions, saved mission statuses, analyst profile changes, and application preferences under{" "}
               <code className="text-cyan-300 bg-cyan-950/40 px-1 py-0.5 rounded text-xs font-mono">honoured1-dashboard-v1</code>.
@@ -463,7 +430,6 @@ export default function Settings() {
             <p className="text-xs text-rose-300/90 mt-2 font-medium">
               Reference CLPS catalogue data will be restored to defaults. This cannot be undone.
             </p>
-
             <div className="mt-6 flex items-center justify-end gap-3">
               <button
                 type="button"

@@ -144,7 +144,7 @@ export const DEFAULT_STATE: State = {
     { id: "n-4", text: "Blue Ghost 1 launch window confirmed", at: Date.now() - 1000 * 60 * 360, read: false },
     { id: "n-5", text: "Griffin Mission 1 lander tests completed", at: Date.now() - 1000 * 60 * 720, read: false },
   ],
-  profile: { name: "Harshitha", email: "analyst@nasa.gov", role: "Mission Analyst" },
+  profile: { name: "LunaOps", email: "analyst@nasa.gov", role: "Mission Analyst" },
   prefs: { notifications: true, compactCards: true },
 };
 

@@ -1,6 +1,7 @@
 /* Google Fonts for the login page and dashboard */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Courgette&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Manrope:wght@400;500;600;700&family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 @import "tailwindcss";
@@ -509,7 +510,7 @@ body {
   font-style: italic;
   font-weight: 600;
   line-height: 1.4;
-  color: #45435C;
+  color: rgba(255, 255, 255, 0.95);
   margin: 18px 0 24px;
   white-space: normal;
 }
@@ -765,4 +766,148 @@ body {
   box-shadow: 0 0 0 1000px transparent inset !important;
   background-color: transparent !important;
   transition: background-color 99999s ease-in-out 0s;
+}
+
+
+/* Make login form text readable on the glass card */
+
+.login-world .field-label {
+  color: rgba(255, 255, 255, 0.96) !important;
+}
+
+.login-world .input-shell {
+  color: #ffffff;
+}
+
+.login-world .input-shell input {
+  color: #ffffff !important;
+  caret-color: #ffffff;
+  background: transparent !important;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.login-world .input-shell input::placeholder {
+  color: rgba(255, 255, 255, 0.78) !important;
+  opacity: 1;
+}
+
+.login-world .remember {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.login-world .switch-mode {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.login-world .login-btn-text {
+  color: #d9baff !important;
+}
+
+.login-world .show-button {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.login-world .remember input[type="checkbox"] {
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Honoured1 animated purple logo ring */
+.logo-glow-ring {
+  isolation: isolate;
+}
+
+.logo-glow-ring::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 15px;
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      #7c3aed 60deg,
+      #e9d5ff 100deg,
+      #a855f7 150deg,
+      transparent 210deg,
+      #7c3aed 280deg,
+      transparent 360deg);
+  animation: logo-ring-spin 3s linear infinite;
+  filter: blur(2px);
+  z-index: -1;
+}
+
+.logo-glow-ring::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: #7c3aed;
+  box-shadow:
+    0 0 10px rgba(168, 85, 247, 0.7),
+    0 0 22px rgba(124, 58, 237, 0.45);
+  z-index: -1;
+}
+
+@keyframes logo-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-glow-ring::before {
+    animation: none;
+  }
+}
+
+@keyframes signal-pulse {
+  from {
+    transform: scaleY(0.45);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Global Spacecraft Custom Cursors (Satellite Default / Lunar Lander Press)
+   ========================================================================== */
+:root {
+  --cursor-satellite: url('/cursors/satellite-cursor.png') 24 24, auto;
+  --cursor-lander: url('/cursors/lander-cursor.png') 24 24, pointer;
+  --active-space-cursor: var(--cursor-satellite);
+}
+
+html.cursor-lander-active {
+  --active-space-cursor: var(--cursor-lander);
+}
+
+html,
+body,
+#root,
+*,
+*::before,
+*::after,
+a,
+button,
+input,
+textarea,
+select,
+label,
+summary,
+canvas,
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+.cursor-pointer,
+.cursor-default,
+.cursor-grab,
+.cursor-grabbing,
+.cursor-move,
+.cursor-crosshair,
+.cursor-text {
+  cursor: var(--active-space-cursor) !important;
 }

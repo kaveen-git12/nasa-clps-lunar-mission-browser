@@ -238,14 +238,27 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent" />
         <div className="relative grid min-h-[320px] md:grid-cols-2">
           <div className="p-8">
-            <p className="text-xs tracking-[0.2em] text-muted-foreground">NASA COMMERCIAL LUNAR PAYLOAD SERVICES</p>
-            <h1 className="text-gradient-title mt-3 text-4xl font-bold leading-tight md:text-5xl">
-              CLPS Lunar
+            <p className="text-xs tracking-[0.2em] text-muted-foreground">DEEP SPACE INTELLIGENCE • LUNAR OPERATIONS</p>
+            <h1
+              className="mt-3 text-4xl font-bold leading-tight md:text-5xl"
+              style={{ fontFamily: '"Cinzel", serif' }}
+            >
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+                CLPS Lunar
+              </span>
               <br />
-              Mission Browser
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Mission Browser
+              </span>
             </h1>
-            <p className="mt-4 max-w-md text-lg text-secondary-foreground">
-              Explore missions, plan operations, and visualize NASA's journey to the Moon's south pole.
+            <p
+              className="mt-5 max-w-md text-2xl leading-relaxed text-white md:text-3xl"
+              style={{
+                fontFamily: '"Blackadder ITC", cursive',
+                textShadow: "0 0 14px rgba(255,255,255,0.18)",
+              }}
+            >
+              Beyond Earth. Into the Unknown. Mapping Humanity’s Next Frontier.
             </p>
             <button
               onClick={() => setPanel({ kind: "catalog" })}

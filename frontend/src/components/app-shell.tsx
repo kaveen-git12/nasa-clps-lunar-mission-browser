@@ -11,7 +11,7 @@ import {
   Library,
   MapPin,
   Menu,
-  Moon,
+  RadioTower,
   Rocket,
   Search,
   Settings,
@@ -39,7 +39,7 @@ const TABS = [
 ] as const;
 
 const linkBase =
-  "flex items-center gap-4 rounded-xl px-4 py-3.5 text-[15px] transition-colors";
+  "flex items-center gap-4 rounded-xl px-4 py-3.5 text-base transition-colors";
 
 type Panel = "profile" | "prefs" | "settings" | null;
 
@@ -47,14 +47,19 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <div className="flex items-center gap-3 px-2 py-2">
-        <img
-          src="/favicon.svg"
-          alt="Honoured1 team logo"
-          className="h-12 w-12 rounded-xl object-contain p-1 ring-2 ring-primary/60 bg-popover/40"
-        />
+        <div className="logo-glow-ring relative grid h-12 w-12 shrink-0 place-items-center rounded-xl">
+          <img
+            src="/honoured1-team.png"
+            alt="Honoured1 team logo"
+            className="relative z-10 h-full w-full rounded-xl object-cover"
+          />
+        </div>
+
         <div>
           <div className="text-xl font-bold tracking-wide">Honoured1</div>
-          <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Lunar Control</div>
+          <div className="text-[11px] text-muted-foreground uppercase tracking-wider">
+            Lunar Control
+          </div>
         </div>
       </div>
 
@@ -69,7 +74,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                 `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
               }
             >
-              <Home className="h-5 w-5" strokeWidth={1.6} /> Dashboard
+              <Home className="h-5 w-5" strokeWidth={1.6} />
+              <span className="font-['Alice']">Dashboard</span>
             </NavLink>
           </li>
           <li>
@@ -80,7 +86,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                 `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
               }
             >
-              <Rocket className="h-5 w-5" strokeWidth={1.6} /> Missions
+              <Rocket className="h-5 w-5" strokeWidth={1.6} />
+              <span className="font-['Alice']">Missions</span>
             </NavLink>
           </li>
           {TABS.map(({ label, icon: I, to }) => (
@@ -92,22 +99,57 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                   `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
                 }
               >
-                <I className="h-5 w-5" strokeWidth={1.6} /> {label}
+                <I className="h-5 w-5" strokeWidth={1.6} />
+                <span className="font-['Alice']">{label}</span>
               </NavLink>
             </li>
           ))}
         </ul>
-        <div className="glass mt-auto rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <Moon className="h-7 w-7 text-muted-foreground" strokeWidth={1.4} />
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Exploring <b className="text-foreground">Sustainable</b>
-              <br />
-              Lunar Futures
-            </p>
+
+        <div className="group relative mt-auto isolate overflow-hidden rounded-2xl border border-white/25 bg-white/[0.09] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.25),0_0_24px_rgba(34,211,238,0.10)] backdrop-blur-2xl backdrop-saturate-150">
+          <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-white/[0.14] via-white/[0.02] to-cyan-300/[0.07]" />
+          <div className="pointer-events-none absolute -left-10 -top-12 h-28 w-28 rounded-full bg-cyan-300/20 blur-3xl transition-all duration-700 group-hover:bg-cyan-300/30" />
+          <div className="pointer-events-none absolute -bottom-12 -right-8 h-32 w-32 rounded-full bg-purple-500/20 blur-3xl transition-all duration-700 group-hover:bg-purple-500/35" />
+          <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent opacity-80" />
+          <div className="relative flex items-center gap-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-cyan-300/20 bg-cyan-300/[0.08]">
+              <RadioTower className="h-5 w-5 text-cyan-300" strokeWidth={1.6} />
+            </div>
+
+            <div className="min-w-0">
+              <p className="font-['Alice'] text-sm tracking-wide text-cyan-200">
+                Lunar Signal
+              </p>
+              <p className="mt-0.5 text-[9px] tracking-[0.16em] text-slate-400">
+                DEEP SPACE NETWORK
+              </p>
+            </div>
+            <span className="ml-auto h-2 w-2 shrink-0 animate-pulse rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.8)]" />
           </div>
-          <div className="mt-4 h-1 rounded-full bg-muted">
-            <div className="h-full w-1/2 rounded-full bg-cta" />
+
+          <p className="relative mt-4 text-sm leading-relaxed text-white/90">
+            The next frontier is calling.
+          </p>
+
+          <div className="relative mt-3 flex h-6 items-center justify-between gap-[3px]" aria-label="Decorative signal waveform">
+            {Array.from({ length: 27 }, (_, i) => (
+              <span
+                key={i}
+                className={`w-[3px] rounded-full ${i % 4 === 0 ? "bg-purple-400/90" : "bg-cyan-300/80"
+                  }`}
+                style={{
+                  height: `${5 + ((i * 7 + 3) % 18)}px`,
+                  animation: `signal-pulse ${0.7 + (i % 5) * 0.15}s ease-in-out ${i * 0.035}s infinite alternate`,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="relative mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+            <span className="text-[9px] tracking-[0.13em] text-emerald-200/90">
+              SIGNAL INTERFACE READY
+            </span>
           </div>
         </div>
       </nav>

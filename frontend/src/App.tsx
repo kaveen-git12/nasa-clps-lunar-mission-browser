@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useSpacecraftCursor } from './hooks/useSpacecraftCursor'
 import Home from './pages/Home'
 import Missions from './pages/Missions'
 import AddMission from './pages/AddMission'
@@ -11,6 +12,8 @@ import Settings from './pages/Settings'
 import Login from './pages/Login'
 
 function App() {
+  useSpacecraftCursor()
+
   return (
     <BrowserRouter>
       <Routes>

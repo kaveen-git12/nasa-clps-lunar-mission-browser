@@ -11,7 +11,14 @@ export default function Visualization() {
     <AppShell>
       <div className="flex flex-col gap-6 pb-8">
         <div>
-          <h1 className="text-gradient-title text-3xl font-bold">3D Lunar Visualization</h1>
+          <h1
+            className="text-3xl font-bold tracking-tight"
+            style={{ fontFamily: '"Cinzel", serif' }}
+          >
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+              3D Visualization
+            </span>
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Interactive high-fidelity 3D simulation of the Moon's surface topography and illumination environment.
           </p>

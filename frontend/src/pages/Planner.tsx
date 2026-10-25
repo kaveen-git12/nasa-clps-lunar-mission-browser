@@ -16,7 +16,14 @@ export default function Planner() {
       <div className="flex flex-col gap-6 pb-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-gradient-title text-3xl font-bold">Mission Planner</h1>
+            <h1
+              className="text-3xl font-bold tracking-tight"
+              style={{ fontFamily: '"Cinzel", serif' }}
+            >
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Mission Planner
+              </span>
+            </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Plan operational phases, transit timelines, and lunar landing trajectories for CLPS payloads.
             </p>
