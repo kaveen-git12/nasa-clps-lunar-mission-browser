@@ -92,6 +92,17 @@ def test_sanitize_and_faithfulness() -> None:
     assert "<think>" not in cleaned
     assert "https://nasa.gov" not in cleaned
 
+    # Test stripping leading reasoning before </think>
+    leading_think = "Checking user query\n</think>\n\nHello! How can I help you today?"
+    cleaned_leading = sanitize_output(leading_think)
+    assert "</think>" not in cleaned_leading
+    assert cleaned_leading == "Hello! How can I help you today?"
+
+    # Test stripping debug prefixes like 'No tool calls required.'
+    debug_raw = "No tool calls required. Hello there!"
+    cleaned_debug = sanitize_output(debug_raw)
+    assert cleaned_debug == "Hello there!"
+
     ans, warns = check_faithfulness(
         answer="Shackleton is at -89.9 degrees latitude.",
         tool_Payloads=[{"id": "shackleton", "lat": "not yet provided"}],
@@ -138,3 +149,27 @@ def test_health_and_chat_sse_flow() -> None:
     assert "event: token" in body
     assert "event: final" in body
     assert "shackleton" in body
+
+
+def test_greeting_chat_sse_flow_no_tools() -> None:
+    app = create_app()
+    fake_llm = FakeLLM(
+        responses=[
+            LLMResponse(content="Hello! I'm Lunar AI, your mission assistant. How can I help today?"),
+        ]
+    )
+    app.dependency_overrides[get_llm_client] = lambda: fake_llm
+    client = TestClient(app)
+
+    chat_resp = client.post(
+        "/api/ai/chat",
+        json={"messages": [{"role": "user", "content": "hello"}]},
+    )
+    assert chat_resp.status_code == 200
+    body = chat_resp.text
+    assert "event: status" in body
+    assert "event: token" in body
+    assert "event: final" in body
+    assert "Lunar AI" in body
+    assert "No tool calls required" not in body
+    assert "I couldn't complete that request" not in body

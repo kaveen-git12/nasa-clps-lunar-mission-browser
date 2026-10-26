@@ -8,7 +8,12 @@ from typing import Any
 
 THINK_BLOCK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 UNCLOSED_THINK_RE = re.compile(r"<think>.*$", re.DOTALL | re.IGNORECASE)
+LEADING_THINK_RE = re.compile(r"^.*?</think>", re.DOTALL | re.IGNORECASE)
+THOUGHT_BLOCK_RE = re.compile(r"<thought>.*?</thought>", re.DOTALL | re.IGNORECASE)
+LEADING_THOUGHT_RE = re.compile(r"^.*?</thought>", re.DOTALL | re.IGNORECASE)
+UNCLOSED_THOUGHT_RE = re.compile(r"<thought>.*$", re.DOTALL | re.IGNORECASE)
 EXTERNAL_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^\)]+)\)", re.IGNORECASE)
+DEBUG_PREFIX_RE = re.compile(r"^(?:(?:no\s+tool\s+calls?\s+(?:required|needed|available)|no\s+tools?\s+(?:required|needed|available)|no\s+applicable\s+tools?)\s*[\.:\-]*\s*)+", re.IGNORECASE)
 NUMBER_TOKEN_RE = re.compile(r"(?<![a-zA-Z_])-?\d+(?:\.\d+)?(?![a-zA-Z_])")
 
 
@@ -32,9 +37,19 @@ rate_limiter = RateLimiter()
 
 
 def sanitize_output(text: str) -> str:
-    cleaned = THINK_BLOCK_RE.sub("", text)
+    cleaned = text
+    # Strip any leading thinking/reasoning text preceding </think> or </thought>
+    cleaned = LEADING_THINK_RE.sub("", cleaned)
+    cleaned = LEADING_THOUGHT_RE.sub("", cleaned)
+    # Strip full and unclosed think blocks
+    cleaned = THINK_BLOCK_RE.sub("", cleaned)
     cleaned = UNCLOSED_THINK_RE.sub("", cleaned)
+    cleaned = THOUGHT_BLOCK_RE.sub("", cleaned)
+    cleaned = UNCLOSED_THOUGHT_RE.sub("", cleaned)
+    # Strip external markdown links
     cleaned = EXTERNAL_MD_LINK_RE.sub(r"\1", cleaned)
+    # Strip internal debug/tool-decision phrases
+    cleaned = DEBUG_PREFIX_RE.sub("", cleaned)
     return cleaned.strip()
 
 

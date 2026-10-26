@@ -11,10 +11,28 @@ from .prompts import build_system_prompt
 from .schemas import AIConfig, ChatRequest, ChatResult, SceneCommand, SourceItem, ToolResult
 from .tools.registry import dispatch_tool, get_ollama_tool_schemas
 
+DEFAULT_GREETING_FALLBACK = (
+    "Hello! I'm Lunar AI, your mission assistant for the Lunar Mission Browser. "
+    "How can I help you explore CLPS missions, landing sites, or lunar data today?"
+)
+
+DEBUG_RESPONSES = {
+    "not_available",
+    "not available",
+    "no tool calls required",
+    "no tool calls needed",
+    "no tool required",
+    "no tools required",
+    "no tool needed",
+    "no tools needed",
+    "no tool available for greeting",
+    "no tool available for greeting.",
+}
+
 
 def _build_code_fallback_summary(tool_outputs: list[tuple[str, ToolResult]]) -> str:
     if not tool_outputs:
-        return "I couldn't complete that request."
+        return DEFAULT_GREETING_FALLBACK
     parts: list[str] = ["I couldn't complete that request. Here is the raw status from the tools called:"]
     for tool_name, res in tool_outputs:
         msg = res.message or res.status
@@ -103,6 +121,11 @@ async def run_orchestrator_sse(
             # Final answer turn
             yield ("status", {"state": "writing", "tool": None})
             clean_answer = sanitize_output(llm_resp.content)
+
+            # Prevent raw debug / tool-rejection responses on conversational turns when no tools were called
+            if not successful_tool_outputs and clean_answer.lower().strip(" .!:") in DEBUG_RESPONSES:
+                clean_answer = DEFAULT_GREETING_FALLBACK
+
             if not clean_answer:
                 clean_answer = _build_code_fallback_summary(successful_tool_outputs)
 

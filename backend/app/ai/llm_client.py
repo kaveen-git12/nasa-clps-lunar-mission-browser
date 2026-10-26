@@ -53,20 +53,13 @@ class OllamaClient:
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
     ) -> LLMResponse:
+        # Preserve user messages verbatim without appending /no_think or meta commands
         prepared_messages = [dict(m) for m in messages]
-        if self.config.ai_disable_thinking and prepared_messages:
-            for i in range(len(prepared_messages) - 1, -1, -1):
-                if prepared_messages[i].get("role") == "user":
-                    content = prepared_messages[i].get("content", "")
-                    if not content.endswith("/no_think"):
-                        prepared_messages[i]["content"] = f"{content} /no_think"
-                    break
 
         payload: dict[str, Any] = {
             "model": self.config.ai_model,
             "messages": prepared_messages,
             "stream": False,
-            "think": not self.config.ai_disable_thinking,
             "options": {
                 "temperature": self.config.ai_temperature,
                 "num_ctx": self.config.ai_num_ctx,
@@ -81,6 +74,7 @@ class OllamaClient:
             body = resp.json()
 
         msg = body.get("message", {})
+        # Note: Ollama isolates reasoning into msg["thinking"]. msg["content"] contains the actual response.
         content = msg.get("content", "") or ""
         raw_tool_calls = msg.get("tool_calls") or []
         parsed_calls: list[dict[str, Any]] = []
