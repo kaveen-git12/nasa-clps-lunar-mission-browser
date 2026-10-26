@@ -50,6 +50,18 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.env
+.venv/
+env/
+venv/
+
+.npm
+
 # Optional eslint cache
 .eslintcache
 
