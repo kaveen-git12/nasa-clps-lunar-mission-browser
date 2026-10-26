@@ -9,10 +9,12 @@ import {
   Database,
   LayoutGrid,
   Mail,
+  Mouse,
   RotateCcw,
   Save,
   Settings as SettingsIcon,
   SlidersHorizontal,
+  Sparkles,
   User,
   X,
 } from "lucide-react";
@@ -280,6 +282,141 @@ export default function Settings() {
             </div>
           </form>
         </section>
+        {/* Spacecraft Cursor Settings Card */}
+        <section className="relative rounded-[28px] border border-white/20 bg-gradient-to-br from-slate-900/80 via-slate-950/60 to-indigo-950/40 p-6 md:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_35px_rgba(124,58,237,0.15),inset_0_1px_2px_rgba(255,255,255,0.35),inset_0_-1px_2px_rgba(255,255,255,0.08)] overflow-hidden">
+          {/* Specular Edge Caustics & Ambient Glows */}
+          <div className="pointer-events-none absolute -top-16 -left-16 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-purple-600/15 blur-3xl" />
+          <div className="pointer-events-none absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+          <div className="pointer-events-none absolute top-0 left-0 w-28 h-[2px] bg-gradient-to-r from-white/90 via-white/40 to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 w-36 h-[2px] bg-gradient-to-r from-white/80 via-white/30 to-transparent" />
+
+          {/* Card Header */}
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/10">
+            <div className="flex items-center gap-5">
+              {/* Glass Squircle Cursor Icon */}
+              <div className="relative w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-b from-white/20 via-white/5 to-white/0 border border-white/30 shadow-[0_0_24px_rgba(139,92,246,0.45),0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.5)] backdrop-blur-md">
+                <svg
+                  className="w-8 h-8 text-white fill-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M4 4l7.07 17 2.51-7.39L21 11.07 4 4z" />
+                </svg>
+              </div>
+
+              {/* Header Text */}
+              <div>
+                <p className="text-[11px] font-bold tracking-[0.22em] text-slate-300/80 uppercase">
+                  APPEARANCE
+                </p>
+                <h2 className="text-2xl md:text-[26px] font-bold text-white tracking-tight mt-0.5">
+                  Spacecraft Cursor
+                </h2>
+                <p className="text-xs md:text-sm text-slate-300/85 leading-relaxed mt-1 max-w-xl">
+                  Enable a custom satellite and lunar lander cursor for an immersive lunar experience.
+                </p>
+              </div>
+            </div>
+
+            {/* Toggle Switch */}
+            <div className="flex flex-col items-center gap-1.5 shrink-0 self-start sm:self-center">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={prefs.spacecraftCursor ?? true}
+                aria-label="Toggle Spacecraft Cursor"
+                onClick={() => {
+                  const current = prefs.spacecraftCursor ?? true;
+                  const next = !current;
+                  actions.updatePrefs({ ...prefs, spacecraftCursor: next });
+                  try {
+                    localStorage.setItem("spacecraft-cursor-enabled", String(next));
+                  } catch { /* ignore storage error */ }
+                }}
+                className={`relative inline-flex h-9 w-16 shrink-0 cursor-pointer rounded-full p-1 transition-all duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 ${
+                  (prefs.spacecraftCursor ?? true)
+                    ? "bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 border border-purple-400/80 shadow-[0_0_22px_rgba(168,85,247,0.7),inset_0_0_8px_rgba(192,132,252,0.4)]"
+                    : "bg-slate-800/90 border border-slate-700/80 shadow-none"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none block h-7 w-7 transform rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.4)] ring-0 transition duration-300 ease-in-out ${
+                    (prefs.spacecraftCursor ?? true) ? "translate-x-7 bg-white" : "translate-x-0 bg-slate-400"
+                  }`}
+                />
+              </button>
+              <span
+                className={`text-[11px] font-bold tracking-[0.2em] transition-colors duration-200 ${
+                  (prefs.spacecraftCursor ?? true) ? "text-slate-200" : "text-slate-500"
+                }`}
+              >
+                {(prefs.spacecraftCursor ?? true) ? "ON" : "OFF"}
+              </span>
+            </div>
+          </div>
+
+          {/* Card Bottom: Preview Tiles & Feature List */}
+          <div className="relative z-10 pt-6 flex flex-col lg:flex-row items-stretch gap-6">
+            {/* Left Preview Tiles */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 shrink-0">
+              {/* Satellite Tile */}
+              <div className="flex flex-col items-center">
+                <div className="relative w-44 sm:w-48 h-36 rounded-2xl border border-white/20 bg-slate-950/50 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5),0_8px_20px_rgba(0,0,0,0.3)] hover:border-white/40 transition-all group">
+                  <img
+                    src="/images/cursor-preview-satellite.png"
+                    alt="Satellite Cursor"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <span className="mt-2.5 text-[11px] font-semibold tracking-[0.16em] text-slate-300 uppercase text-center">
+                  SATELLITE CURSOR
+                </span>
+              </div>
+
+              {/* Lander Tile */}
+              <div className="flex flex-col items-center">
+                <div className="relative w-44 sm:w-48 h-36 rounded-2xl border border-white/20 bg-slate-950/50 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5),0_8px_20px_rgba(0,0,0,0.3)] hover:border-white/40 transition-all group">
+                  <img
+                    src="/images/cursor-preview-lander.png"
+                    alt="Lander Cursor"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <span className="mt-2.5 text-[11px] font-semibold tracking-[0.16em] text-slate-300 uppercase text-center">
+                  LANDER CURSOR
+                </span>
+              </div>
+            </div>
+
+            {/* Vertical Subtle Divider */}
+            <div className="hidden lg:block w-[1px] bg-white/10 self-stretch my-1" />
+
+            {/* Right Features Box */}
+            <div className="flex-1 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-5 sm:p-6 flex flex-col justify-center gap-4 shadow-[inset_0_0_15px_rgba(255,255,255,0.02)]">
+              <div className="flex items-center gap-4">
+                <Sparkles className="w-5 h-5 text-sky-300 drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] shrink-0" strokeWidth={1.8} />
+                <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed font-normal">
+                  Replaces the standard pointer with themed spacecraft cursors.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <Mouse className="w-5 h-5 text-sky-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] shrink-0" strokeWidth={1.8} />
+                <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed font-normal">
+                  Automatically switches between satellite and lander based on interaction.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <SettingsIcon className="w-5 h-5 text-sky-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] shrink-0" strokeWidth={1.8} />
+                <p className="text-xs sm:text-sm text-slate-200/90 leading-relaxed font-normal">
+                  Your preference is saved and applied every time you open the app.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 2. Application Preferences Card */}
         <section className="glass rounded-2xl p-6 md:p-7">
           <div className="flex items-start gap-3 mb-6">

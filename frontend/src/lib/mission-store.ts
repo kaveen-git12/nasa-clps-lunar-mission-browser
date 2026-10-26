@@ -117,7 +117,7 @@ export const findMission = (id: string) => CATALOG.find((m) => m.id === id);
 
 export type Notice = { id: string; text: string; at: number; read: boolean };
 export type Profile = { name: string; email: string; role: string; avatar?: string };
-export type Prefs = { notifications: boolean; compactCards: boolean };
+export type Prefs = { notifications: boolean; compactCards: boolean; spacecraftCursor: boolean };
 export type Added = { id: string; name: string };
 
 export type State = {
@@ -145,7 +145,7 @@ export const DEFAULT_STATE: State = {
     { id: "n-5", text: "Griffin Mission 1 lander tests completed", at: Date.now() - 1000 * 60 * 720, read: false },
   ],
   profile: { name: "LunaOps", email: "analyst@nasa.gov", role: "Mission Analyst" },
-  prefs: { notifications: true, compactCards: true },
+  prefs: { notifications: true, compactCards: true, spacecraftCursor: true },
 };
 
 let state: State = DEFAULT_STATE;

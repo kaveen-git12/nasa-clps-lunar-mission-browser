@@ -1,12 +1,25 @@
 // src/hooks/useSpacecraftCursor.ts
 import { useEffect } from 'react';
+import { useStore } from '@/lib/mission-store';
 
 const RELEASE_DELAY_MS = 240;
 const ACTIVE_CLASS = 'cursor-lander-active';
+const ENABLED_CLASS = 'spacecraft-cursor-enabled';
 
 export function useSpacecraftCursor(): void {
+  const { prefs } = useStore();
+  const enabled = prefs.spacecraftCursor ?? true;
+
   useEffect(() => {
     const root = document.documentElement;
+
+    if (!enabled) {
+      root.classList.remove(ENABLED_CLASS);
+      root.classList.remove(ACTIVE_CLASS);
+      return;
+    }
+
+    root.classList.add(ENABLED_CLASS);
     let releaseTimeoutId: number | null = null;
     let isPressed = false;
 
@@ -85,5 +98,5 @@ export function useSpacecraftCursor(): void {
       window.removeEventListener('blur', handleWindowBlur);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [enabled]);
 }
