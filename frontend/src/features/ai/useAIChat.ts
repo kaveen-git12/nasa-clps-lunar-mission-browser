@@ -1,20 +1,19 @@
 // frontend/src/features/ai/useAIChat.ts
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type {
-  AIHealthStatus,
   AIStatusEvent,
   ChatContext,
   ChatResult,
   ConversationThread,
   UIMessage,
 } from "./types";
+import { useAIHealth } from "./useAIHealth";
 import { useSceneCommands } from "./useSceneCommands";
 
 const API_BASE_URL =
   (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_API_BASE_URL ||
   "http://localhost:8000";
 
-const STORAGE_ENABLED_KEY = "honoured1_ai_enabled";
 const STORAGE_THREADS_KEY = "honoured1_ai_recent_threads";
 
 const INITIAL_ASSISTANT_MESSAGE: UIMessage = {
@@ -47,14 +46,13 @@ const DEFAULT_RECENT_THREADS: ConversationThread[] = [
 ];
 
 export function useAIChat(context?: ChatContext) {
-  const [aiEnabledByUser, setAiEnabledByUserState] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_ENABLED_KEY);
-      return saved === null ? true : saved === "true";
-    } catch {
-      return true;
-    }
-  });
+  const {
+    health,
+    isOffline,
+    aiEnabledByUser,
+    setAiEnabledByUser,
+    refreshHealth,
+  } = useAIHealth();
 
   const [threads, setThreads] = useState<ConversationThread[]>(() => {
     try {
@@ -68,40 +66,8 @@ export function useAIChat(context?: ChatContext) {
   const [messages, setMessages] = useState<UIMessage[]>([INITIAL_ASSISTANT_MESSAGE]);
   const [status, setStatus] = useState<AIStatusEvent | null>(null);
   const [errorBanner, setErrorBanner] = useState<string | null>(null);
-  const [health, setHealth] = useState<AIHealthStatus | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const { dispatchSceneCommands, sceneNotice, clearSceneNotice } = useSceneCommands();
-
-  const setAiEnabledByUser = useCallback((enabled: boolean) => {
-    setAiEnabledByUserState(enabled);
-    try {
-      localStorage.setItem(STORAGE_ENABLED_KEY, String(enabled));
-    } catch {
-      // ignore storage errors
-    }
-  }, []);
-
-  const refreshHealth = useCallback(async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/ai/health`);
-      if (!res.ok) throw new Error("Health endpoint failed");
-      const data: AIHealthStatus = await res.json();
-      setHealth(data);
-    } catch {
-      setHealth({
-        ai_enabled: true,
-        ollama_reachable: false,
-        model: "qwen3:4b",
-        model_present: false,
-        prompt_version: "1",
-        hint: "AI assistant is offline",
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    refreshHealth();
-  }, [refreshHealth]);
 
   const stopGeneration = useCallback(() => {
     if (abortRef.current) {
@@ -279,6 +245,7 @@ export function useAIChat(context?: ChatContext) {
     status,
     errorBanner,
     health,
+    isOffline,
     aiEnabledByUser,
     setAiEnabledByUser,
     sendMessage,

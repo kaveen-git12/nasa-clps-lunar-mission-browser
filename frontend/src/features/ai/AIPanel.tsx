@@ -3,14 +3,9 @@ import React, { useState } from "react";
 import {
   Box,
   ChevronRight,
-  Clock,
   Compass,
-  Cpu,
-  HardDrive,
-  Layers,
   MessageSquare,
   Search,
-  Settings,
   Sparkles,
   Sun,
   X,
@@ -67,7 +62,6 @@ export const AIPanel: React.FC<AIPanelProps> = ({
     errorBanner,
     health,
     aiEnabledByUser,
-    setAiEnabledByUser,
     sendMessage,
     stopGeneration,
     threads,
@@ -127,9 +121,9 @@ export const AIPanel: React.FC<AIPanelProps> = ({
 
   // Full-Page Mission Control Dashboard Variant
   return (
-    <div className="grid min-h-[calc(100vh-6rem)] grid-cols-1 gap-6 p-1 font-['Plus_Jakarta_Sans',sans-serif] text-slate-100 lg:grid-cols-12">
+    <div className="grid min-h-0 min-w-0 flex-1 grid-cols-1 gap-4 overflow-hidden p-1 font-['Plus_Jakarta_Sans',sans-serif] text-slate-100 lg:grid-cols-12">
       {/* Center Main AI Column */}
-      <div className="flex flex-col lg:col-span-8">
+      <div className="flex h-full min-h-0 min-w-0 flex-col lg:col-span-8">
         <AIChat
           messages={messages}
           status={status}
@@ -142,83 +136,9 @@ export const AIPanel: React.FC<AIPanelProps> = ({
         />
       </div>
 
-      {/* Right Status, Tools & Recent Conversations Sidebar */}
-      <aside className="flex flex-col gap-4 lg:col-span-4">
-        {/* 1. Local Model Status Card */}
-        <section className="rounded-3xl border border-white/10 bg-[#090d21]/90 p-5 shadow-xl backdrop-blur-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-              <h2 className="font-['Outfit',sans-serif] text-sm font-semibold text-white">
-                Local Model Status
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
-                  !isOffline && aiEnabledByUser
-                    ? "border border-emerald-400/40 bg-emerald-500/20 text-emerald-300"
-                    : "border border-rose-400/40 bg-rose-500/20 text-rose-300"
-                }`}
-              >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    !isOffline && aiEnabledByUser ? "bg-emerald-400" : "bg-rose-400"
-                  }`}
-                />
-                {!aiEnabledByUser
-                  ? "Disabled"
-                  : !isOffline
-                  ? "Connected"
-                  : "Offline"}
-              </span>
-
-              <button
-                type="button"
-                onClick={() => setAiEnabledByUser(!aiEnabledByUser)}
-                title="Toggle Enable AI assistant"
-                aria-label="Toggle Enable AI assistant"
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-white/5 text-slate-300 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              >
-                <Settings className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <dl className="mt-4 space-y-3 text-xs">
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-2 text-slate-400">
-                <Cpu className="h-3.5 w-3.5 text-slate-400" />
-                <span>Model</span>
-              </dt>
-              <dd className="font-medium text-slate-100">Qwen3 4B (4-bit)</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-2 text-slate-400">
-                <Clock className="h-3.5 w-3.5 text-slate-400" />
-                <span>Runtime</span>
-              </dt>
-              <dd className="font-medium text-slate-100">Ollama (127.0.0.1:11434)</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-2 text-slate-400">
-                <Layers className="h-3.5 w-3.5 text-slate-400" />
-                <span>Context</span>
-              </dt>
-              <dd className="font-medium text-slate-100">4096 tokens</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-2 text-slate-400">
-                <HardDrive className="h-3.5 w-3.5 text-slate-400" />
-                <span>Hardware</span>
-              </dt>
-              <dd className="font-medium text-slate-100">RTX 5050 (8 GB VRAM)</dd>
-            </div>
-          </dl>
-        </section>
-
-        {/* 2. Available Tools Card */}
+      {/* Right Tools & Recent Conversations Sidebar */}
+      <aside className="flex h-full min-h-0 min-w-0 flex-col gap-4 overflow-y-auto lg:col-span-4">
+        {/* 1. Available Tools Card */}
         <section className="rounded-3xl border border-white/10 bg-[#090d21]/90 p-5 shadow-xl backdrop-blur-xl">
           <div className="mb-3.5 flex items-center justify-between">
             <div className="flex items-center gap-2">

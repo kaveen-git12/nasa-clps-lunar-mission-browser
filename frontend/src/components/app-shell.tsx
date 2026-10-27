@@ -443,10 +443,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden">
       <div className="flex gap-5 p-4 lg:p-5">
         <Sidebar />
-        <main className="flex min-w-0 flex-1 flex-col gap-5">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-5 lg:overflow-hidden">
           <header className="relative z-30 flex items-center gap-3 md:gap-4">
             <button
               onClick={() => setMobileMenuOpen(true)}
