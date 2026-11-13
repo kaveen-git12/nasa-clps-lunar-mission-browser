@@ -1,11 +1,12 @@
-
-import math
+﻿import math
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 from sites import SITES
 
 app = Flask(__name__)
+CORS(app)  # This is the magic line that fixes the error!
 
 
 def error_response(code, message, status_code, details=None):
