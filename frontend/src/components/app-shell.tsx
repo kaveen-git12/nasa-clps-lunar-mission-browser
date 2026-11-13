@@ -18,6 +18,7 @@ import {
   SlidersHorizontal,
   User,
   X,
+  MessageSquare,
 } from "lucide-react";
 import { Modal } from "@/components/modal";
 import { useOutside } from "@/hooks/use-outside";
@@ -41,7 +42,7 @@ const TABS = [
 const linkBase =
   "flex items-center gap-4 rounded-xl px-4 py-3.5 text-base transition-colors";
 
-type Panel = "profile" | "prefs" | "settings" | null;
+type Panel = "profile" | "prefs" | "settings" | "ai-chat" | null;
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
@@ -64,7 +65,6 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       </div>
 
       <nav className="sidebar-glass flex flex-1 flex-col rounded-2xl p-3">
-
         <ul className="space-y-1.5">
           <li>
             <NavLink
@@ -135,8 +135,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             {Array.from({ length: 27 }, (_, i) => (
               <span
                 key={i}
-                className={`w-[3px] rounded-full ${i % 4 === 0 ? "bg-purple-400/90" : "bg-cyan-300/80"
-                  }`}
+                className={`w-[3px] rounded-full ${i % 4 === 0 ? "bg-purple-400/90" : "bg-cyan-300/80"}`}
                 style={{
                   height: `${5 + ((i * 7 + 3) % 18)}px`,
                   animation: `signal-pulse ${0.7 + (i % 5) * 0.15}s ease-in-out ${i * 0.035}s infinite alternate`,
@@ -436,6 +435,94 @@ function SettingsPanel({ close }: { close: () => void }) {
   );
 }
 
+function AIChatModal({ close }: { close: () => void }) {
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
+    { role: 'assistant', content: 'Hello! I am your AI Lunar Assistant connected to FastAPI. How can I help you plan your CLPS mission today?' }
+  ]);
+  const [inputVal, setInputVal] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputVal.trim() || loading) return;
+
+    const userMessage = inputVal;
+    setInputVal('');
+    setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      if (!response.body) throw new Error('No response stream');
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantMessage = '';
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        assistantMessage += chunk;
+
+        setMessages((prev) => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1].content = assistantMessage;
+          return newMessages;
+        });
+      }
+    } catch (error) {
+      console.error('AI chat connection error:', error);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: '⚠️ Error: Could not connect to AI backend on port 8000.' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Modal title="AI Mission Assistant" onClose={close}>
+      <div className="flex flex-col h-[400px]">
+        <div className="flex-1 overflow-y-auto space-y-3 pr-2 mb-3">
+          {messages.map((m, idx) => (
+            <div
+              key={idx}
+              className={`p-3 rounded-xl text-sm ${
+                m.role === 'user'
+                  ? 'bg-primary text-primary-foreground ml-auto max-w-[80%]'
+                  : 'bg-muted text-foreground mr-auto max-w-[80%]'
+              }`}
+            >
+              {m.content}
+            </div>
+          ))}
+        </div>
+        <form onSubmit={handleSend} className="flex gap-2 border-t pt-3">
+          <input
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+            placeholder="Ask about lunar sites, trajectories, or payloads..."
+            className="flex-1 rounded-xl border bg-input px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+          />
+          <button type="submit" disabled={loading} className="bg-cta rounded-xl px-4 py-2 text-sm font-medium">
+            Send
+          </button>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [panel, setPanel] = useState<Panel>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -455,6 +542,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
             <SearchBox />
             <div className="ml-auto flex items-center gap-2 md:gap-4">
+              <button
+                onClick={() => setPanel("ai-chat")}
+                className="flex items-center gap-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-2 text-xs font-medium text-cyan-300 hover:bg-cyan-500/20 transition-colors"
+                aria-label="Open AI Assistant"
+              >
+                <MessageSquare className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Assistant</span>
+              </button>
               <Notifications />
               <ProfileMenu onOpen={setPanel} />
             </div>
@@ -483,6 +578,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {panel === "profile" && <ProfileForm close={() => setPanel(null)} />}
       {panel === "prefs" && <Preferences close={() => setPanel(null)} />}
       {panel === "settings" && <SettingsPanel close={() => setPanel(null)} />}
+      {panel === "ai-chat" && <AIChatModal close={() => setPanel(null)} />}
     </div>
   );
 }
