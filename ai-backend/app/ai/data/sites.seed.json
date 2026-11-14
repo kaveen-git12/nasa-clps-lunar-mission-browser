@@ -1,0 +1,35 @@
+{
+  "_notice": "PLACEHOLDER DATA. Replace with verified records from authoritative sources before use.",
+  "sites": [
+    {
+      "id": "shackleton",
+      "name": "Shackleton crater",
+      "region": "south_pole",
+      "lat": null,
+      "lon": null,
+      "datum": null,
+      "confirmed_landing_site": false,
+      "notes": "Candidate location for exploration"
+    },
+    {
+      "id": "de-gerlache",
+      "name": "de Gerlache crater",
+      "region": "south_pole",
+      "lat": null,
+      "lon": null,
+      "datum": null,
+      "confirmed_landing_site": false,
+      "notes": "Candidate location for exploration"
+    },
+    {
+      "id": "malapert-massif",
+      "name": "Malapert Massif",
+      "region": "south_pole",
+      "lat": null,
+      "lon": null,
+      "datum": null,
+      "confirmed_landing_site": false,
+      "notes": "Candidate location for exploration"
+    }
+  ]
+}
