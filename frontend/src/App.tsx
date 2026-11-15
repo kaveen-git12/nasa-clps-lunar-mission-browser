@@ -10,6 +10,7 @@ import LunarMap from './pages/LunarMap'
 import Resources from './pages/Resources'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
+import AIAssistant from './pages/AIAssistant'
 
 function App() {
   useSpacecraftCursor()
@@ -28,6 +29,7 @@ function App() {
         <Route path="/visualization" element={<Visualization />} />
         <Route path="/lunar-map" element={<LunarMap />} />
         <Route path="/resources" element={<Resources />} />
+        <Route path="/ai" element={<AIAssistant />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

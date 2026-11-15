@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { actions, useStore, DEFAULT_STATE, type Prefs, type Profile } from "@/lib/mission-store";
+import { LocalAIModelStatus } from "@/features/ai/LocalAIModelStatus";
 export default function Settings() {
   const { profile, prefs } = useStore();
   const [profileForm, setProfileForm] = useState<Profile>(profile);
@@ -416,6 +417,9 @@ export default function Settings() {
             </div>
           </div>
         </section>
+
+        {/* Local AI Model Status Section */}
+        <LocalAIModelStatus />
 
         {/* 2. Application Preferences Card */}
         <section className="glass rounded-2xl p-6 md:p-7">

@@ -16,6 +16,7 @@ import {
   Search,
   Settings,
   SlidersHorizontal,
+  Sparkles,
   User,
   X,
   MessageSquare,
@@ -36,6 +37,7 @@ const TABS = [
   { label: "3D Visualization", icon: Box, to: "/visualization" },
   { label: "Lunar Map", icon: MapPin, to: "/lunar-map" },
   { label: "Resources", icon: BookOpen, to: "/resources" },
+  { label: "AI Assistant", icon: Sparkles, to: "/ai" },
   { label: "Settings", icon: Settings, to: "/settings" },
 ] as const;
 
@@ -96,7 +98,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                 to={to}
                 onClick={onNavigate}
                 className={({ isActive }) =>
-                  `${linkBase} ${isActive ? "bg-nav-active font-medium text-foreground" : "text-secondary-foreground hover:bg-white/10"}`
+                  `${linkBase} ${isActive ? (to === "/ai" ? "border border-purple-500/60 bg-gradient-to-r from-purple-900/60 to-indigo-900/50 font-medium text-white shadow-[0_0_20px_rgba(168,85,247,0.35)]" : "bg-nav-active font-medium text-foreground") : "text-secondary-foreground hover:bg-white/10"}`
                 }
               >
                 <I className="h-5 w-5" strokeWidth={1.6} />
@@ -192,7 +194,7 @@ function SearchBox() {
             if (e.key === "Enter" && results[0]) pick(results[0].id);
           }}
           className="w-full bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
-          placeholder="Search missions, landing sites, or regions..."
+          placeholder="Search missions, landing sites, or ask AI..."
           aria-label="Search missions"
         />
       </label>
@@ -528,10 +530,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden">
       <div className="flex gap-5 p-4 lg:p-5">
         <Sidebar />
-        <main className="flex min-w-0 flex-1 flex-col gap-5">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-5 lg:overflow-hidden">
           <header className="relative z-30 flex items-center gap-3 md:gap-4">
             <button
               onClick={() => setMobileMenuOpen(true)}
